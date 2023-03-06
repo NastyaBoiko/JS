@@ -64,4 +64,4 @@ let timer = setTimeout(go = () => {
     }
 }, stops[i].time * 1200 + charecter * 1200 / 60)
 
-
+//комментарий
