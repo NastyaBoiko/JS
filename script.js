@@ -1,7 +1,8 @@
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-// console.log(getRandomInt(-3, 4))
+// Задача 1
+// Временной масштаб симуляции: 1200мс:1ч.
 
 const stops = [
     {
@@ -64,4 +65,16 @@ let timer = setTimeout(go = () => {
     }
 }, stops[i].time * 1200 + charecter * 1200 / 60)
 
-//комментарий
+//Задача 2
+// Временной масштаб симуляции: 320мс:1ч.
+
+distance = 40
+
+velocity = 2
+
+timeLim = 4
+
+rest = 4 //3-5
+
+
+
