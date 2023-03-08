@@ -72,35 +72,48 @@ function Turtle(name) {
     this.name = name;
     this.distance = 40;
     this.velocity = 2;
-    this.timeAll = 0;
     this.timeLim = 4;
+    this.extraTime = 0
     this.sleep = Math.getRandom(3, 5);
+    this.timeAll = 0;
+    this.res = ``
 
     this.changeSleep = () => {
         this.sleep = Math.getRandom(3, 5);
+
+        if (this.sleep > 4) {
+            this.extraTime = 0.125 * (this.sleep - 4) / 0.25 //7,5 минут на преодоление 250 метров
+        } else {
+            this.extraTime = 0
+        }
     }
 
     this.run = () => {
-        let length = this.velocity * this.timeLim
-        this.timeAll += this.timeLim
+        let length = this.velocity * (this.timeLim + this.extraTime)
+        this.timeAll += this.timeLim + this.extraTime
         this.distance -= length
-        console.log(`Черепаха ${this.name} преодолевает ${length} км за ${this.timeLim} часа, осталось: ${this.distance} км\n`)
-        Boolean(this.distance)? setTimeout(this.rest, this.timeLim * 320) : ``;
+
+
+        console.log(`Черепаха ${this.name} преодолевает ${length} км за ${this.timeLim + this.extraTime} часа, осталось: ${this.distance} км\n`)
+        this.distance > 0 ? setTimeout(this.rest, this.timeLim * 320) : this.finish()
     }
 
     this.rest = () => {
         this.changeSleep()
         this.timeAll += this.sleep;
         console.log(`Черепаха ${this.name} устала и спит ${this.sleep} часа\n`)
-        Boolean(this.distance)? setTimeout(this.run, this.sleep * 320) : ``;
+        this.distance > 0 ? setTimeout(this.run, this.sleep * 320) : ``;
     }
 
     this.zabeg = () => {
         setTimeout(this.run, this.timeLim * 320);
     }
 
-
-    this.timeAllF = () => this.timeAll
+    this.finish = () => {
+        alert(`Черепаха ${this.name}, время забега: ${this.timeAll}\n`);
+        console.log(`Черепаха ${this.name}, время забега: ${this.timeAll}\n`);
+        
+    }
 
 
 
@@ -110,6 +123,8 @@ let paha = new Turtle('Paha')
 let paha2 = new Turtle('Paha2')
 paha.zabeg();
 paha2.zabeg();
+
+
 
 
 rest = 4 //3-5
