@@ -93,9 +93,13 @@ function Turtle(name) {
         this.timeAll += this.timeLim + this.extraTime
         this.distance -= length
 
-
         console.log(`Черепаха ${this.name} преодолевает ${length} км за ${this.timeLim + this.extraTime} часа, осталось: ${this.distance} км\n`)
-        this.distance > 0 ? setTimeout(this.rest, this.timeLim * 320) : this.finish()
+        if (this.distance > 0) {
+            setTimeout(this.rest, this.timeLim * 320)
+        } else {
+            this.finish();
+            results()
+        } 
     }
 
     this.rest = () => {
@@ -110,8 +114,8 @@ function Turtle(name) {
     }
 
     this.finish = () => {
-        alert(`Черепаха ${this.name}, время забега: ${this.timeAll}\n`);
-        console.log(`Черепаха ${this.name}, время забега: ${this.timeAll}\n`);
+        // alert(`Черепаха ${this.name}, время забега: ${this.timeAll}\n`);
+        this.res = `Черепаха ${this.name}, время забега: ${this.timeAll}\n`;
         
     }
 
@@ -123,6 +127,10 @@ let paha = new Turtle('Paha')
 let paha2 = new Turtle('Paha2')
 paha.zabeg();
 paha2.zabeg();
+
+function results() {
+    alert(paha.res + paha2.res )
+}
 
 
 
