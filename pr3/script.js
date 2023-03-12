@@ -4,6 +4,7 @@ Math.getRandom = (min, max) => {
 // Задача 1
 // Временной масштаб симуляции: 1200мс:1ч.
 
+
 const stops = [
     {
         name: 'Конная',
@@ -27,43 +28,92 @@ const stops = [
     }
 ];
 
-// new Date(year, month, date, hours, minutes, seconds, ms)
-let date = new Date(2023, 0, 17, 15);
-let schedule = new Date(2023, 0, 17, 15);
-
-function defineCharecter(dataSc, dataCur) {
-    let char = dataSc - dataCur;
-    let itog;
-
-    if (char > 0) {
-        itog = 'пришел заранее'
-    } else if (char == 0) {
-        itog = "по расписанию"
-    } else {
-        itog = "с опозданием"
+const stops2 = [
+    {
+        name: 'Лавинная',
+        time: 0
+    },
+    {
+        name: 'Лавандовая',
+        time: 2
+    },
+    {
+        name: 'Креативная',
+        time: 2
+    },
+    {
+        name: 'Хижина 25',
+        time: 3
+    },
+    {
+        name: 'Наличная',
+        time: 4
+    },
+    {
+        name: 'Боровая',
+        time: 4
     }
-    return itog;
+];
+
+function Train(name, stops, date) {
+    this.name = name;
+    this.stops = stops
+    this.date = new Date(2023, 0, 17, 15);
+    this.schedule = new Date(2023, 0, 17, 15);
+    this.i = 0;
+    this.charecter;
+
+    this.go = () => {
+
+        this.charecter = (this.i == 0) ? 0 : Math.getRandom(-15, 15);
+
+        this.changeTime();
+
+        console.log(`${this.name}: ${this.stops[this.i].name}, время: ${this.date.toLocaleTimeString()}, ожидаемое время: ${this.schedule.toLocaleTimeString()}, характер: ${this.defineCharecter(this.schedule, this.date)}`);
+
+        this.i++;
+        if (this.i < this.stops.length) {
+            setTimeout(this.go, this.stops[this.i].time * 1200 + this.charecter * 1200 / 60)
+        }
+    }
+
+    this.curTimeMinsSec = () => {
+        return `${(new Date).getMinutes()}:${(new Date).getSeconds()}:${(new Date).getMilliseconds()}`;
+    }
+
+    this.changeTime = () => {
+        this.schedule.setHours(this.schedule.getHours() + this.stops[this.i].time);
+        this.date.setHours(this.date.getHours() + this.stops[this.i].time);
+        this.date.setMinutes(this.date.getMinutes() + this.charecter);
+    }
+
+
+    this.defineCharecter = (dataSc, dataCur) => {
+        let char = dataSc - dataCur;
+        let itog;
+        let diff = Math.abs(char / (1000 * 60));
+        if (char > 0) {
+            itog = `пришел заранее на ${diff} мин.`
+        } else if (char == 0) {
+            itog = "по расписанию"
+        } else {
+            itog = `с опозданием на ${diff} мин.`
+        }
+        return itog;
+    }
+
+    this.run = () => {
+        setTimeout(this.go, this.stops[this.i].time * 1200 + this.charecter * 1200 / 60 )
+    }
+
 }
 
-let i = 0;
-let charecter;
+let tinny = new Train("Поезд 1", stops, 2023, 0, 17, 15);
+tinny.run()
+let tinny2 = new Train("Поезд 2", stops2, 2023, 0, 17, 5);
+tinny2.run()
 
-let timer = setTimeout(go = () => {
-    
-    charecter = (i == 0) ? 0 : Math.getRandom(-15, 15);
 
-    schedule.setHours(schedule.getHours() + stops[i].time);
-    
-    date.setHours(date.getHours() + stops[i].time);
-
-    date.setMinutes(date.getMinutes() + charecter);
-
-    // console.log(`${charecter} : ${stops[i].name}, время: ${date.toLocaleTimeString()}, ожидаемое время: ${schedule.toLocaleTimeString()}, характер: ${defineCharecter(schedule, date)}; ${(new Date).getMinutes()}:${(new Date).getSeconds()}:${(new Date).getMilliseconds()}`);
-    i++;
-    if (i < stops.length) {
-        setTimeout(go, stops[i].time * 1200 + charecter * 1200 / 60)
-    }
-}, stops[i].time * 1200 + charecter * 1200 / 60)
 
 //Задача 2
 // Временной масштаб симуляции: 320мс:1ч.
@@ -119,22 +169,15 @@ function Turtle(name) {
         
     }
 
+
+
 }
 
 let paha = new Turtle('Paha')
 let paha2 = new Turtle('Paha2')
-paha.zabeg();
-paha2.zabeg();
+// paha.zabeg();
+// paha2.zabeg();
 
-function results() {
-    if (paha.res !== `` && paha2.res !== ``)
-    alert(paha.res + paha2.res)
-}
-
-
-
-
-rest = 4 //3-5
-
-
-
+// function results() {
+//     alert(paha.res + paha2.res )
+// }
