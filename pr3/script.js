@@ -119,8 +119,6 @@ function Turtle(name) {
         
     }
 
-
-
 }
 
 let paha = new Turtle('Paha')
@@ -129,7 +127,8 @@ paha.zabeg();
 paha2.zabeg();
 
 function results() {
-    alert(paha.res + paha2.res )
+    if (paha.res !== `` && paha2.res !== ``)
+    alert(paha.res + paha2.res)
 }
 
 
