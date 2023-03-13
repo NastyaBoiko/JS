@@ -59,8 +59,8 @@ const stops2 = [
 function Train(name, stops, date) {
     this.name = name;
     this.stops = stops
-    this.date = new Date(2023, 0, 17, 15);
-    this.schedule = new Date(2023, 0, 17, 15);
+    this.date = new Date(...date);
+    this.schedule = new Date(...date);
     this.i = 0;
     this.charecter;
     this.timeVagon = 0;
@@ -118,10 +118,10 @@ function Train(name, stops, date) {
 
 }
 
-let tinny = new Train("Поезд 1", stops, 2023, 0, 17, 15);
-// tinny.run()
-let tinny2 = new Train("Поезд 2", stops2, 2023, 0, 17, 5);
-// tinny2.run()
+let tinny = new Train("Поезд 1", stops, [2023, 1, 17, 15]);
+tinny.run()
+let tinny2 = new Train("Поезд 2", stops2, [2023, 1, 17, 5]);
+tinny2.run()
 
 
 
@@ -184,9 +184,9 @@ function Turtle(name) {
 
 let paha = new Turtle('Paha')
 let paha2 = new Turtle('Paha2')
-paha.zabeg();
-paha2.zabeg();
+// paha.zabeg();
+// paha2.zabeg();
 
-function results() {
-    alert(paha.res + paha2.res )
-}
+// function results() {
+//     alert(paha.res + paha2.res )
+// }
