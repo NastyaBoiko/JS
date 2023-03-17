@@ -38,10 +38,6 @@ class Unit {
         return this.#status
     }
 
-    /* get changeStatus() {
-        return this.#changeStatus();
-    } */
-
     attackedBy = (player) => {
         this.#health -= player.damage
         if (this.#health <= 0) {
@@ -50,9 +46,6 @@ class Unit {
         } 
     }
 
-    /* set attackedBy(player) {
-        return this.#attackedBy(player);
-    } */
 }
 
 un1 = new Unit()
@@ -74,29 +67,25 @@ class Army {
     get num() {
         return this.#num;
     }
-
     get name() {
         return this.#name;
     }
     get army() {
         return this.#army;
     }
-
-    canPlay = () => {
-        return Boolean(this.#army.filter(unit => unit.status == 'active').length); 
-    }
-
-    countDestroy = () => {
+    get countDestroy() {
         return this.#army.filter(unit => unit.status == 'destroy').length;
     }
 
-    findActive = () => {
+    get canPlay() {
+        return Boolean(this.#army.filter(unit => unit.status == 'active').length); 
+    }
+
+    get findActive() {
         return this.#army.filter(unit => unit.status == 'active')
     } 
 
 }
-
-ar1 = new Army(5, 'fff')
 
 class Game {
     #armies = []
@@ -108,7 +97,11 @@ class Game {
         }
     }
 
-    attack = function(point, attacker) {
+    get check() {
+        return this.#activeArmies().length > 1;
+    }
+
+    #attack = function(point, attacker) {
         
         const key1 = Math.getRandom(0, point.length - 1)
         const key2 = Math.getRandom(0, attacker.length - 1)
@@ -117,23 +110,23 @@ class Game {
         return `${key1 + 1} атакован ${key2 + 1} на ${attacker[key2].damage} оставшееся здоровье: ${point[key1].health}`
     }
 
-    round = () => {
-        const randomArmy = this.activeArmies()
+    #round = () => {
+        const randomArmy = this.#activeArmies()
         let team1 = randomArmy[0]
         let team2 = randomArmy[1]
 
         let res = ``;
-        while ( this.check() ) {
+        while ( this.check ) {
             
-            res += `${team1.name} атакует ${team2.name}: ${this.attack(team2.findActive(), team1.findActive())}\n`
+            res += `${team1.name} атакует ${team2.name}: ${this.#attack(team2.findActive, team1.findActive)}\n`
 
-            if (team2.canPlay()) {
-                res += `${team2.name} атакует ${team1.name}: ${this.attack(team1.findActive(), team2.findActive())}\n`
+            if (team2.canPlay) {
+                res += `${team2.name} атакует ${team1.name}: ${this.#attack(team1.findActive, team2.findActive)}\n`
             }
             // Война нескольких:
-            if (this.check()) {
+            if (this.check) {
 
-                const randomArmy = this.activeArmies()
+                const randomArmy = this.#activeArmies()
                 team1 = randomArmy[0]
                 team2 = randomArmy[1]
             }
@@ -141,27 +134,23 @@ class Game {
         return res;
     }
 
-    activeArmies = () => {
+    #activeArmies = () => {
         this.#armies.sort(() => Math.random() - 0.5)
-        return this.#armies.filter(army => army.canPlay())
+        return this.#armies.filter(army => army.canPlay)
     }
 
-    check = () => {
-        return this.activeArmies().length > 1;
-    }
-
-    findWinner = () => {
+    #findWinner = () => {
         let res
         this.#armies.forEach((army) => {
-            if (army.canPlay()) {
-                res = `\nВыиграла команда ${army.name}\nКоличество выживших юнитов: ${army.findActive().length}\nКоличество погибших юнитов: ${army.countDestroy()}\n\n`;
+            if (army.canPlay) {
+                res = `\nВыиграла команда ${army.name}\nКоличество выживших юнитов: ${army.findActive.length}\nКоличество погибших юнитов: ${army.countDestroy}\n\n`;
                 this.#Winners.push(army.name)
             }
         })
         return res
     }
 
-    new = () => {
+    #new = () => {
         this.#armies.forEach((army) => {
             army.army.forEach((unit) => {
                 unit.health = 100;
@@ -175,18 +164,18 @@ class Game {
         let res = ``
         for (let i = 1; i < num + 1; i++) {
             res += `Раунд ${i} \n`
-            res += this.round();
-            let win = this.findWinner()
+            res += this.#round();
+            let win = this.#findWinner()
             alert(`Раунд ${i}\n ${win}`)
             res += win;
-            this.new()
+            this.#new()
         }
-        let result = this.stats() + this.result()
+        let result = this.#stats() + this.#result()
         alert(result);
         return res
     }
 
-    stats = () => {
+    #stats = () => {
         let res = '';
         for (let i = 0; i < this.#armies.length; i++) {
             res += `Кол-во побед ${this.#armies[i].name}: ${this.#Winners.filter(item => item === this.#armies[i].name).length}\n`;
@@ -195,7 +184,7 @@ class Game {
 
     }
 
-    result = () => {
+    #result = () => {
         const winner = {};
         let res = ``;
         let proverka = true;
