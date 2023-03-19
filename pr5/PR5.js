@@ -18,6 +18,20 @@ class ErrorLetter extends Error
     }
 }
 
+class ErrorValues extends Error 
+{ 
+    #message;
+
+    constructor(message = 'значения не могут быть равны 0!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorValues: ${this.#message}`
+    }
+}
+
 class ErrorMinus extends Error 
 { 
     #message;
@@ -42,7 +56,7 @@ class ErrorType extends Error
     }
 
     get myMessage() {
-        return `ErrorMinus: ${this.#message}`
+        return `ErrorType: ${this.#message}`
     }
 }
 
@@ -83,10 +97,13 @@ class Square
     #b;
     #c;
 
-    constructor(a, b, c) {
-        this.#a = a;
-        this.#b = b;
-        this.#c = c;
+    constructor(...mas) {
+        this.#a = mas[0];
+        this.#b = mas[1];
+        this.#c = mas[2];
+        if (mas.length > 3) {
+            throw new ErrorType('Слишком много аргументов!')
+        }
     }
 
     sqrt() {
@@ -96,7 +113,9 @@ class Square
         let x1;
         let x2;
 
-        if (this.check) {
+        if (this.checkZero){
+            throw new ErrorValues('введены все 0!')
+        } else if (this.check) {
             if (this.#a != 0) {
                 if(this.#b == 0 && this.#c == 0) {
                     res = "0"
@@ -105,7 +124,7 @@ class Square
                     x2 = -((-this.#c / this.#a) ** 0.5)
                     res = `${x1}; ${x2}`
                 } else if (this.#b == 0 && this.#a / this.#c > 0) {
-                    res = "нет"
+                    res = "корней нет"
                 } else if (this.#c == 0) {
                     x1 = 0
                     x2 = -(this.#b / this.#a)
@@ -120,29 +139,33 @@ class Square
                         x = (-this.#b + D ** 0.5) / (2 * this.#a)
                         res = `${x}`
                     } else {
-                        res = 'нет'
+                        res = 'корней нет'
                     }
                 }
             } else if (this.#b == 0 && this.#c != 0) {
-                res = "нет"
+                res = "корней нет"
             } else {
-                x = -(this.#c / this.#b)
-                res = `${x}`
-                throw ErrorType('Введено не квадратное уравнение, а линейное!')
+                // x = -(this.#c / this.#b)
+                // res = `${x}`
+                throw new ErrorType('Введено не квадратное уравнение, а линейное!')
             }
             return `Ответ: ${res}`;
         } else {
-            throw ErrorLetter('в параметрах не все числа!')
+            throw new ErrorLetter('в параметрах не все числа!')
         }
     }
 
     get check() {
         return typeof this.#a == 'number' && typeof this.#b == 'number' && typeof this.#c == 'number';
     }
+    
+    get checkZero() {
+        return this.#a == 0 && this.#b == 0 && this.#c == 0;
+    }
 }
 
 try {
-    const squar = new Square(0, 1, -30)
+    const squar = new Square(1, 0, -4)
     console.log(squar.sqrt())
 } catch (err) {
     console.log(err.myMessage)
