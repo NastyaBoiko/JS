@@ -65,7 +65,7 @@ class Fact {
     fact(num) {
         let res
         try {
-            if (typeof num == 'number') {
+            if (Number.isInteger(num)) {
                 if (num > 1) {
                     res = num * this.fact(num - 1)
                 } else if (num < 0) { 
@@ -74,7 +74,7 @@ class Fact {
                     res = 1
                 }
             } else {
-                throw new ErrorLetter(`${num} не является числом!`)
+                throw new ErrorType(`${num} не является целым числом!`)
             }
             
         } catch (err) {
@@ -108,7 +108,7 @@ class Square
     #b;
     #c;
 
-    constructor(...mas) {
+    constructor(mas) {
         this.#a = mas[0];
         this.#b = mas[1];
         this.#c = mas[2];
@@ -117,10 +117,10 @@ class Square
         }
     }
 
-    sqrt(...mas) {
-        this.#a = mas[0];
-        this.#b = mas[1];
-        this.#c = mas[2];
+    sqrt(mas) {
+        this.#a = Number(mas[0].trim());
+        this.#b = Number(mas[1].trim());
+        this.#c = Number(mas[2].trim());
         try {
             let res;
             let D;
@@ -130,8 +130,8 @@ class Square
     
             if (mas.length > 3) {
                 throw new ErrorType('Слишком много аргументов!')
-            } else if (mas.length == 0) {
-                throw new ErrorType('Слишком мало аргументов!')
+            } else if (mas.length < 3) {
+                throw new ErrorType('Не хватает аргументов!')
             }
 
             if (this.checkZero){
@@ -172,7 +172,7 @@ class Square
                 }
                 return `Ответ: ${res}`;
             } else {
-                throw new ErrorLetter('в параметрах не все числа!')
+                throw new ErrorLetter('В параметрах не все числа!')
             }
         } catch (err) {
             return err.myMessage
@@ -180,7 +180,7 @@ class Square
     }
 
     get check() {
-        return typeof this.#a == 'number' && typeof this.#b == 'number' && typeof this.#c == 'number';
+        return !isNaN(this.#a) && !isNaN(this.#b) && !isNaN(this.#c);
     }
     
     get checkZero() {
@@ -190,7 +190,47 @@ class Square
 
 const squar = new Square(1, 0, -4)
 
+// console.log(squar.sqrt(['-4', '2', '0']))
 
+while (true) {
+    let inp = prompt(`Введите номер задания:\n1. Вычислить факториал\n2. Решить квадратное уравнение\nQ - выход`)
+    if (inp == null || inp == 'Q') {
+        break;
+    } else if (inp == 1) {
+        while (true) {
+            let str = prompt('Введите число для нахождения его факторила:\nQ - выход')
+            if (str == null || str == 'Q') {
+                break;
+            } else {
+                let num = Number(str)
+                if (!isNaN(num)) {
+                    // alert(Number(num));
+                    alert(`Факториал ${num}: ${facty.fact(num)}`)
+                } else {
+                    alert('Введите целое положительное число!')
+                }
+            }
+        }
+    } else if (inp == 2) {
+        while (true) {
+            let args = prompt('Введите коэффициенты уравнения a, b, c через запятую\nQ - выход');
+            if (args == null || args == 'Q') {
+                break;
+            } else {
+                args = args.split(','); 
+                if (args.length == 3){
+                    alert(squar.sqrt(args))
+                } else {
+                    alert('Неверное количество аргументов! Их должно быть 3!')
+                }
+                // console.log(args)
+            }
+        }
+        
+    } else {
+        alert('Некорректный ввод!')
+    }
+}
 
 
 
