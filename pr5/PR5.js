@@ -4,7 +4,7 @@
 своем классе, наследованным от Error.
 */
 
-class ErrorLetter extends Error 
+class ErrorNotNumber extends Error 
 { 
     #message;
 
@@ -14,11 +14,11 @@ class ErrorLetter extends Error
     }
 
     get myMessage() {
-        return `ErrorLetter: ${this.#message}`
+        return `ErrorNotNumber: ${this.#message}`
     }
 }
 
-class ErrorValues extends Error 
+class ErrorValuesZero extends Error 
 { 
     #message;
 
@@ -28,11 +28,11 @@ class ErrorValues extends Error
     }
 
     get myMessage() {
-        return `ErrorValues: ${this.#message}`
+        return `ErrorValuesZero: ${this.#message}`
     }
 }
 
-class ErrorMinus extends Error 
+class ErrorIntegerMinus extends Error 
 { 
     #message;
 
@@ -42,7 +42,7 @@ class ErrorMinus extends Error
     }
 
     get myMessage() {
-        return `ErrorMinus: ${this.#message}`
+        return `ErrorIntegerMinus: ${this.#message}`
     }
 }
 
@@ -59,7 +59,47 @@ class ErrorType extends Error
         return `ErrorType: ${this.#message}`
     }
 }
+class ErrorInteger extends Error 
+{ 
+    #message;
 
+    constructor(message = 'не введено целочисленное значение!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorInteger: ${this.#message}`
+    }
+}
+
+class ErrorNumArguments extends Error 
+{ 
+    #message;
+
+    constructor(message = 'неверное число аргументов!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorNumArguments: ${this.#message}`
+    }
+}
+
+class ErrorUndefinedArguments extends Error 
+{ 
+    #message;
+
+    constructor(message = 'неверное число аргументов!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorUndefinedArguments: ${this.#message}`
+    }
+}
 class Fact {
 
     fact(num) {
@@ -69,12 +109,12 @@ class Fact {
                 if (num > 1) {
                     res = num * this.fact(num - 1)
                 } else if (num < 0) { 
-                    throw new ErrorMinus(`${num} меньше 0!`)
+                    throw new ErrorIntegerMinus(`${num} меньше 0!`)
                 } else {
                     res = 1
                 }
             } else {
-                throw new ErrorType(`${num} не является целым числом!`)
+                throw new ErrorInteger(`${num} не является целым числом!`)
             }
             
         } catch (err) {
@@ -85,7 +125,7 @@ class Fact {
     }
 }
 
-facty = new Fact();
+const facty = new Fact();
 
 /* try {
     console.log(facty.fact(0))
@@ -113,29 +153,35 @@ class Square
         this.#b = mas[1];
         this.#c = mas[2];
         if (mas.length > 3) {
-            throw new ErrorType('Слишком много аргументов!')
+            throw new ErrorNumArguments('Слишком много аргументов!')
         }
     }
 
     sqrt(mas) {
-        this.#a = Number(mas[0].trim());
-        this.#b = Number(mas[1].trim());
-        this.#c = Number(mas[2].trim());
         try {
+            if (typeof mas == 'undefined') {
+                throw new ErrorUndefinedArguments('Не введены аргументы a, b, c')
+            }
+            this.#a = Number.parseFloat(mas[0].trim());
+            this.#b = Number.parseFloat(mas[1].trim());
+            this.#c = Number.parseFloat(mas[2].trim());
+
             let res;
             let D;
             let x;
             let x1;
             let x2;
     
-            if (mas.length > 3) {
-                throw new ErrorType('Слишком много аргументов!')
-            } else if (mas.length < 3) {
-                throw new ErrorType('Не хватает аргументов!')
-            }
+            if (mas.filter(val => val === '').length > 0) {
+                throw new ErrorNumArguments('Не хватает аргументов!')
+            } else if (mas.length > 3) {
+                throw new ErrorNumArguments('Слишком много аргументов!')
+            } /* else if (mas.length < 3) {
+                throw new ErrorNumArguments('Не хватает аргументов!')
+            } */
 
             if (this.checkZero){
-                throw new ErrorValues('введены все 0!')
+                throw new ErrorValuesZero('введены все 0!')
             } else if (this.check) {
                 if (this.#a != 0) {
                     if(this.#b == 0 && this.#c == 0) {
@@ -172,7 +218,7 @@ class Square
                 }
                 return `Ответ: ${res}`;
             } else {
-                throw new ErrorLetter('В параметрах не все числа!')
+                throw new ErrorNotNumber('В параметрах не все числа!')
             }
         } catch (err) {
             return err.myMessage
@@ -218,19 +264,23 @@ while (true) {
                 break;
             } else {
                 args = args.split(','); 
-                if (args.length == 3){
+                if (args.filter(val => Number.parseFloat(val)).length != 0) {
+                    alert(squar.sqrt(args))
+                } else if (args.filter(val => val === '').length == 3) {
+                    alert('Не переданы аргументы!')
+                } else if (args.filter(val => Number.parseFloat(val)).length > 0){
                     alert(squar.sqrt(args))
                 } else {
-                    alert('Неверное количество аргументов! Их должно быть 3!')
-                }
-                // console.log(args)
+                    alert('Аргументы должны быть числами!')
+                } 
+
             }
         }
-        
     } else {
         alert('Некорректный ввод!')
     }
 }
+
 
 
 
