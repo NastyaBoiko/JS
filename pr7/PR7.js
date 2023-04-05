@@ -255,7 +255,7 @@ while (true) {
     } else if (inp == 1) {
         while (true) {
             let str = prompt('Введите строку:\nQ - выход')
-            console.log(str);
+            // console.log(str);
             
             if (str == null || str == 'Q') {
                 break;
@@ -264,7 +264,7 @@ while (true) {
 
             } else {
                 let needle = prompt(`Строка ${str}\nВведите подстроку:\nQ - выход`)
-                console.log(needle);
+                // console.log(needle);
 
                 if (needle == null || needle == 'Q') {
                     break;
@@ -272,7 +272,10 @@ while (true) {
                     alert('Строка не может быть пустой!')
                 
                 } else {
-                    console.log(strObj.stringCheck(str, needle))
+                    let numTimes = strObj.stringCheck(str, needle);
+                    let count = numTimes % 10 == 1 || numTimes % 10 > 4 ? `раз` : `раза`;
+                    alert(`Подстрока ${needle} входит в строку ${str} ${numTimes} ${count}`)
+                    // console.log(strObj.stringCheck(str, needle))
                 }
             }
         }
@@ -296,7 +299,3 @@ while (true) {
         alert('Некорректный ввод!')
     }
 }
-
-
-
-
