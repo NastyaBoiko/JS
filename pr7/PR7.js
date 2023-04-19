@@ -4,6 +4,9 @@
 своем классе, наследованным от Error.
 */
 
+// let args = '1,2. ';
+// console.log(/^[\d\,\.\-\s]+$/.test(args))
+
 class ErrorNotNumber extends Error 
 { 
     #message;
@@ -149,18 +152,21 @@ class Square
             } 
 
             this.#a = Number.parseFloat(mas[0].trim());
+            console.log(this.#a);
             this.#b = Number.parseFloat(mas[1].trim());
+            console.log(this.#b);
             this.#c = Number.parseFloat(mas[2].trim());
+            console.log(this.#c);
+
 
             let res;
             let D;
             let x;
             let x1;
             let x2;
-    
 
             if (this.checkZero){
-                throw new ErrorValuesZero('введены все 0!')
+                throw new ErrorValuesZero('нельзя вводить все 0!')
             } else if (this.check) {
                 if (this.#a != 0) {
                     if(this.#b == 0 && this.#c == 0) {
@@ -188,12 +194,12 @@ class Square
                             res = 'корней нет'
                         }
                     }
-                } else if (this.#b == 0 && this.#c != 0) {
+                } else if (this.#a != 0 && this.#b == 0 && this.#c != 0) {
                     res = "корней нет"
                 } else {
                     // x = -(this.#c / this.#b)
                     // res = `${x}`
-                    throw new ErrorType('Введено не квадратное уравнение, а линейное!')
+                    throw new ErrorType('Коэффициент а не должен быть равен 0!')
                 }
                 return `Ответ: ${res}`;
             } else {
@@ -245,7 +251,6 @@ let strObj = new SringCheck();
 
 // console.log(strObj.stringCheck(str, needle))
 
-
 // console.log(squar.sqrt(['-4', '2', '0']))
 
 while (true) {
@@ -255,16 +260,15 @@ while (true) {
     } else if (inp == 1) {
         while (true) {
             let str = prompt('Введите строку:\nQ - выход')
-            console.log(str);
+            // console.log(str);
             
             if (str == null || str == 'Q') {
                 break;
             } else if (str == '') {
                 alert('Строка не может быть пустой!')
-
             } else {
                 let needle = prompt(`Строка ${str}\nВведите подстроку:\nQ - выход`)
-                console.log(needle);
+                // console.log(needle);
 
                 if (needle == null || needle == 'Q') {
                     break;
@@ -272,23 +276,38 @@ while (true) {
                     alert('Строка не может быть пустой!')
                 
                 } else {
-                    console.log(strObj.stringCheck(str, needle))
+                    alert(`Количество раз подстрока ${needle} входит в строку ${str}: ${strObj.stringCheck(str, needle)}`);
+                    // console.log(strObj.stringCheck(str, needle))
                 }
             }
         }
     } else if (inp == 2) {
         while (true) {
             let args = prompt('Введите коэффициенты уравнения a, b, c через запятую\nQ - выход');
-            if (args == null || args == 'Q') {
+            if (args == null || args == 'Q' || args == 'q') {
                 break;
             } else {
-                args = args.split(','); 
-                if (args.filter(val => val === '').length > 0) {
-                    alert('Не переданы аргументы!')
-                } else if (args.filter(val => Number.parseFloat(val)).length != 0) {
-                    alert(squar.sqrt(args))
+
+                // Проверяем на наличие только чисел , . -
+                if (/^[\d\,\.\-\s]+$/.test(args)) {
+
+                    args = args.split(',');
+                    if (args.filter(val => val === '').length > 0) {
+                        alert('Передайте 3 числовых аргумента через запятую!')
+                    } else if (args.filter(val => val.split('.').length > 2).length > 0) {
+                        alert('Числа не могут иметь больше одного разделительного знака')
+                    } /* else if (args.filter(val => val.split('-').length > 2).length > 0) {
+                        alert('Числа не могут иметь больше одного разделительного знака')
+                    }  */else if (args.filter(val => Number.parseFloat(val)).length != 0) {
+                        alert(squar.sqrt(args))
+                    } else if (args.filter(val => val == 0).length == 3) {
+                        alert(squar.sqrt(args))
+                    } else {
+                        alert('Аргументы должны быть числами!')
+                    }
+
                 } else {
-                    alert('Аргументы должны быть числами!')
+                    alert('Аргументы должны быть целыми и десятичными числами (разделительный знак - точка), переданными через запятую!')
                 }
             }
         }
@@ -296,7 +315,3 @@ while (true) {
         alert('Некорректный ввод!')
     }
 }
-
-
-
-
