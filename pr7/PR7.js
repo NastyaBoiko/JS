@@ -90,6 +90,32 @@ class ErrorNumArguments extends Error
     }
 }
 
+class ErrorEmptyArguments extends Error 
+{ 
+    #message;
+
+    constructor(message = 'пустые аргументы!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorEmptyArguments: ${this.#message}`
+    }
+}
+class ErrorPoints extends Error 
+{ 
+    #message;
+
+    constructor(message = 'должен быть 1 разделительный знак!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorPoints: ${this.#message}`
+    }
+}
 class ErrorUndefinedArguments extends Error 
 { 
     #message;
@@ -101,6 +127,19 @@ class ErrorUndefinedArguments extends Error
 
     get myMessage() {
         return `ErrorUndefinedArguments: ${this.#message}`
+    }
+}
+class ErrorLetSymbArguments extends Error 
+{ 
+    #message;
+
+    constructor(message = 'аргументы - символы и буквы!') {
+        super(message);
+        this.#message = message
+    }
+
+    get myMessage() {
+        return `ErrorLetSymbArguments: ${this.#message}`
     }
 }
 
@@ -145,11 +184,24 @@ class Square
             if (typeof mas == 'undefined') {
                 throw new ErrorUndefinedArguments('Не введены аргументы a, b, c')
             }
+
             if (mas.length < 3) {
                 throw new ErrorNumArguments('Не хватает аргументов!')
             } else if (mas.length > 3) {
                 throw new ErrorNumArguments('Слишком много аргументов!')
             } 
+
+            if (mas.filter(val => val.trim() === '').length > 0) {
+                throw new ErrorEmptyArguments('Введите все коэффициенты, если коэффициента нет, введите 0!')
+            } else if (mas.filter(val => val.split('.').length > 2).length > 0) {
+                throw new ErrorPoints('Число может иметь только 1 разделительный знак!')
+            }
+
+            if (mas.filter(val => /^[a-zA-Z]+$/.test(val)).length > 0) {
+                throw new ErrorLetSymbArguments('Коэффициенты должны быть числами, а не буквами!')
+            } else if (mas.filter(val => /^[\d\,\.\-\s]+$/.test(val)).length != 3) {
+                throw new ErrorLetSymbArguments('Посторонние символы недопустимы!')
+            }
 
             this.#a = Number.parseFloat(mas[0].trim());
             console.log(this.#a);
@@ -157,7 +209,6 @@ class Square
             console.log(this.#b);
             this.#c = Number.parseFloat(mas[2].trim());
             console.log(this.#c);
-
 
             let res;
             let D;
@@ -203,7 +254,7 @@ class Square
                 }
                 return `Ответ: ${res}`;
             } else {
-                throw new ErrorNotNumber('В параметрах не все числа!')
+                throw new ErrorNotNumber('Коэффициенты должны быть числами!')
             }
         } catch (err) {
             return err.myMessage
@@ -219,7 +270,45 @@ class Square
     }
 }
 
+const masCheck = [
+    ['1', '-5', '6'],
+    ['1', '-5', '7'],
+    ['1', '-10', '25'],
+    ['1', '-3', '0'],
+    ['1', '0', '-9'],
+    ['1', '0', '9'],
+    ['5', '0', '0'],
+    ['0', '1', '1'],
+    ['0', '0', '1'],
+    ['0', '1', '0'],
+    ['0', '0', '0'],
+    ['1.1', '-5.5', '6.5'],
+    ['', '-10', '25'],
+    ['-10', '', '25'],
+    ['-10', '25', ''],
+    ['', '', '25'],
+    ['', '25', ''],
+    ['25', '', ''],
+    ['', '', ''],
+    ['a', 'b', 'c'],
+    ['1', 'b', 'c'],
+    ['a', '1', 'c'],
+    ['a', 'b', '1'],
+    ['a', '1', '1'],
+    ['1', 'b', '1'],
+    ['1', '1', 'c'],
+    ['1.1.2', '1.9.8', '9.8.9'],
+    ['1^2', '5*8', '9'],
+    ['1', '-5', '6', '7'],
+]
+
 const squar = new Square(1, 0, -4)
+
+// console.log(squar.sqrt(['1', '2', '3']));
+
+for (let i = 0; i < masCheck.length; i++) {
+    console.log(`Тест ${i + 1}: ${squar.sqrt(masCheck[i])}`);
+}
 
 class SringCheck 
 {
@@ -252,7 +341,7 @@ let strObj = new SringCheck();
 // console.log(strObj.stringCheck(str, needle))
 
 // console.log(squar.sqrt(['-4', '2', '0']))
-
+/* 
 while (true) {
     let inp = prompt(`Введите номер задания:\n1. Найти количество вхождений строки в подстроку\n2. Решить квадратное уравнение\nQ - выход`)
     if (inp == null || inp == 'Q') {
@@ -296,9 +385,7 @@ while (true) {
                         alert('Передайте 3 числовых аргумента через запятую!')
                     } else if (args.filter(val => val.split('.').length > 2).length > 0) {
                         alert('Числа не могут иметь больше одного разделительного знака')
-                    } /* else if (args.filter(val => val.split('-').length > 2).length > 0) {
-                        alert('Числа не могут иметь больше одного разделительного знака')
-                    }  */else if (args.filter(val => Number.parseFloat(val)).length != 0) {
+                    } else if (args.filter(val => Number.parseFloat(val)).length != 0) {
                         alert(squar.sqrt(args))
                     } else if (args.filter(val => val == 0).length == 3) {
                         alert(squar.sqrt(args))
@@ -314,4 +401,4 @@ while (true) {
     } else {
         alert('Некорректный ввод!')
     }
-}
+} */
